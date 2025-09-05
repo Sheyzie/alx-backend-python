@@ -13,10 +13,10 @@ seed = __import__('seed')
 
 def stream_users():
     connection = seed.connect_to_prodev()
-    print(connection)
-    if connection.is_connected():
+
+    if connection:
         cursor = connection.cursor()
-        cursor.execute(f"SELECT * FROM user_data LIMIT 5;")
+        cursor.execute(f"SELECT * FROM user_data;")
         rows = cursor.fetchall()
         # print(rows)
         num = 0
