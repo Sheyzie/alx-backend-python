@@ -171,6 +171,7 @@ def insert_data(connection, data):
                 query = 'INSERT INTO user_data(name, email, age) VALUES (%s, %s, %s);'
 
                 cursor.execute(query, (row['name'], row['email'], float(row['age'])))
+                connection.commit()
             except Error as e:
                 print('Error inserting data', e)
         

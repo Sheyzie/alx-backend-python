@@ -9,7 +9,7 @@ if connection:
     print(f"connection successful")
 
     connection = seed.connect_to_prodev()
-    print(connection)
+
     if connection:
         seed.create_table(connection)
         seed.insert_data(connection, 'user_data.csv')
