@@ -27,11 +27,11 @@ def stream_user_ages():
 
 def calculate_average_age():
     count = 0
-    age_sum = 0
+    total = 0
     for age in stream_user_ages():
         count += 1
-        age_sum += age
-    return age_sum / count
+        total += age
+    return total / count
     # print(f'Average age of users: {average_age}') 
 
 print('Average age of users:', calculate_average_age())
