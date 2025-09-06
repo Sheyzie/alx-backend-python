@@ -24,12 +24,6 @@ def stream_user_ages():
         age = row[0]
         yield age
 
-    # num = 0
-
-    # while num < len(ages):
-    #     yield ages[num]
-    #     num += 1
-
     connection.close()
 
 def calculate_average_age():
@@ -38,8 +32,8 @@ def calculate_average_age():
     for age in stream_user_ages():
         iteration += 1
         age_sum += age
-    average = age_sum / iteration
-    print('Average age of users: ', average) 
+    average_age = age_sum / iteration
+    print('Average age of users: ', average_age) 
 
 calculate_average_age()
 
