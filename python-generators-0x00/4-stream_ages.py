@@ -34,8 +34,6 @@ def calculate_average_age():
     if count == 0:
         return 0
     return total / count
-    # print(f'Average age of users: {average_age}') 
 
-average_age = calculate_average_age()
-print(f'Average age of users:', average_age)
+
 
