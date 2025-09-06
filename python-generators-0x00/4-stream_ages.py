@@ -26,7 +26,7 @@ def stream_user_ages():
 
     connection.close()
 
-def calculate_average_age():
+def calculate_age():
     iteration = 0
     age_sum = 0
     for age in stream_user_ages():
@@ -34,5 +34,5 @@ def calculate_average_age():
         age_sum += age
     print('Average age of users: ', age_sum / iteration) 
 
-calculate_average_age()
+calculate_age()
 
