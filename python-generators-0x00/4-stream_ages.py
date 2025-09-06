@@ -19,7 +19,7 @@ def stream_user_ages():
     connection = seed.connect_to_prodev()
 
     cursor = connection.cursor()
-    cursor.execute(f"SELECT age FROM user_data;")
+    cursor.execute("SELECT age FROM user_data;")
     for row in cursor:
         age = row[0]
         yield age
