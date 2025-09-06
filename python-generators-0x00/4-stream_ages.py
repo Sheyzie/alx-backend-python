@@ -22,7 +22,7 @@ def stream_user_ages():
     cursor.execute("SELECT age FROM user_data;")
     for (age,) in cursor:
         yield age
-
+    cursor.close()
     connection.close()
 
 def calculate_average_age():
