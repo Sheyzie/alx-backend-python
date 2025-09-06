@@ -13,10 +13,10 @@ You are not allowed to use the SQL AVERAGE
 '''
 
 #!/usr/bin/python3
-seed = __import__('seed')
+from seed import connect_to_prodev
 
 def stream_user_ages():
-    connection = seed.connect_to_prodev()
+    connection = connect_to_prodev()
 
     cursor = connection.cursor()
     cursor.execute("SELECT age FROM user_data;")
