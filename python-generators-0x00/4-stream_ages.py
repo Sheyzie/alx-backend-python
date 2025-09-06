@@ -37,5 +37,5 @@ def calculate_average_age():
     # print(f'Average age of users: {average_age}') 
 
 average_age = calculate_average_age()
-print(f'Average age of users: {average_age}')
+print(f'Average age of users:', average_age)
 
