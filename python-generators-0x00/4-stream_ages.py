@@ -9,13 +9,14 @@ Your script should print Average age of users: average age
 
 You must use no more than two loops in your script
 
-You are not allowed to use the SQL AVERAGE
+You are not allowed to use the
 '''
 
 #!/usr/bin/python3
 from seed import connect_to_prodev
 
 def stream_user_ages():
+    
     connection = connect_to_prodev()
 
     cursor = connection.cursor()
