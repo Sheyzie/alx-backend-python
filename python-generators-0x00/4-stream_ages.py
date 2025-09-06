@@ -20,13 +20,15 @@ def stream_user_ages():
 
     cursor = connection.cursor()
     cursor.execute(f"SELECT age FROM user_data;")
-    ages = cursor.fetchall()
+    for row in cursor:
+        age = row[0]
+        yield age
 
-    num = 0
+    # num = 0
 
-    while num < len(ages):
-        yield ages[num]
-        num += 1
+    # while num < len(ages):
+    #     yield ages[num]
+    #     num += 1
 
     connection.close()
 
@@ -35,7 +37,7 @@ def calculate_average_age():
     age_sum = 0
     for age in stream_user_ages():
         iteration += 1
-        age_sum += age[0]
+        age_sum += age
     average = age_sum / iteration
     print('Average age of users: ', average) 
 
