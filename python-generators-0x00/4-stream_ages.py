@@ -31,7 +31,7 @@ def calculate_mean_age():
     for age in stream_user_ages():
         iteration += 1
         age_sum += age
-    print('Mean age of users: ', age_sum / iteration) 
+    print(f'Average age of users: {age_sum / iteration}') 
 
 calculate_mean_age()
 
