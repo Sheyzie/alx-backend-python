@@ -1,0 +1,40 @@
+'''
+nstruction:
+
+Implement a generator stream_user_ages() that yields user ages one by one.
+
+Use the generator in a different function to calculate the average age without loading the entire dataset into memory
+
+Your script should print Average age of users: average age
+
+You must use no more than two loops in your script
+
+You are not allowed to use the SQL AVERAGE
+'''
+
+#!/usr/bin/python3
+seed = __import__('seed')
+
+def stream_user_ages():
+    connection = seed.connect_to_prodev()
+
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT age FROM user_data;")
+    ages = cursor.fetchall()
+
+    num = 0
+
+    while num < len(ages):
+        yield ages[num]
+        num += 1
+
+    connection.close()
+
+iteration = 0
+age_sum = 0
+for age in stream_user_ages():
+    iteration += 1
+    age_sum += age[0]
+
+print(age_sum / iteration) 
+
