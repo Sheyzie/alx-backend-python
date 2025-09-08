@@ -1,5 +1,17 @@
 import sqlite3
 import functools
+import logging
+
+
+# Logging config
+def log_process(message):
+    logging.basicConfig(
+        # filename='app.log',
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+
+    logging.info(message)
 
 #### decorator to lof SQL queries
 def log_queries(func):
@@ -10,6 +22,7 @@ def log_queries(func):
         # create user table
 
         query = kwargs.get('query')
+        log_process(query)
         print(query)
 
         func(*args, **kwargs)
