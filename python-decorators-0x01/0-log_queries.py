@@ -36,13 +36,14 @@ def create_table():
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
-            age INTEGER
+            age INTEGER,
+            email TEXT NOT NULL
         )
     '''
     )
 
-    cursor.execute('INSERT INTO users (name, age) VALUES (?, ?)', ('Alice', 30))
-    cursor.execute('INSERT INTO users (name, age) VALUES (?, ?)', ('Bob', 25))
+    cursor.execute('INSERT INTO users (name, age, email) VALUES (?, ?, ?)', ('Alice', 30, 'alice@mail.com'))
+    cursor.execute('INSERT INTO users (name, age, email) VALUES (?, ?, ?)', ('Bob', 25, 'bob@mail.com'))
     conn.commit()
 
 @log_queries
