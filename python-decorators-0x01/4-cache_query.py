@@ -12,10 +12,7 @@ def with_db_connection(func):
         conn = kwargs.get('conn')
         if not conn:
             conn = sqlite3.connect('users.db')
-            # Attach custom attribute
-            # wrapper._custom_data = conn
-            kwargs['conn'] = conn
-            func(*args, **kwargs)
+            func(conn, *args, **kwargs)
         else:
             func(*args, **kwargs)
             conn.close()
@@ -24,8 +21,10 @@ def with_db_connection(func):
 def cache_query(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
+        if args in query_cache:
+            return query_cache[args]
         query_cache[args] = func(*args, **kwargs)
-        return query_cache
+        return query_cache[args]
     return wrapper
 
 @with_db_connection
