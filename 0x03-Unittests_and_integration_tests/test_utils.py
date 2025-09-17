@@ -86,17 +86,17 @@ class TestMemoize(unittest.TestCase):
 
     def test_memoize(self):
         """
-        Test that a memoized method is only called once and returns cached value afterwards.
+        Test that a memoized method is only called once.
         """
 
         class TestClass:
             """
-            A helper class with a method and a memoized property for testing memoization.
+            A helper class with a memoized property for testing memoization.
             """
 
             def a_method(self):
                 """
-                A simple method that increments call_count and returns a fixed value.
+                Method that increments call_count and returns a fixed value.
                 """
 
                 self.call_count += 1
