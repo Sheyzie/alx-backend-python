@@ -30,6 +30,10 @@ class TestAccessNestedMap(unittest.TestCase):
         ]
     )
     def test_access_nested_map(self, nested_map, path, expected):
+        """
+        Test that access_nested_map returns the correct value for valid keys and paths.
+        """
+    
         result = access_nested_map(nested_map, path)
         self.assertEqual(result, expected)
 
@@ -40,6 +44,10 @@ class TestAccessNestedMap(unittest.TestCase):
         ]
     )
     def test_access_nested_map_exception(self, nested_map, path, expected):
+        """
+        Test that access_nested_map raises KeyError for invalid paths.
+        """
+
         with self.assertRaises(expected):
             access_nested_map(nested_map, path)
 
