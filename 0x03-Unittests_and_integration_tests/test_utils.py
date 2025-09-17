@@ -21,7 +21,6 @@ class TestAccessNestedMap(unittest.TestCase):
     These tests verify both successful value retrieval and expected
     exceptions when accessing keys in nested dictionaries.
     """
-      
 
     @parameterized.expand(
         [
