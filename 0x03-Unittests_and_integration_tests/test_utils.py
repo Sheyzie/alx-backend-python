@@ -5,6 +5,7 @@ from unittest.mock import patch
 from parameterized import parameterized
 from utils import access_nested_map, get_json, memoize
 
+
 class TestAccessNestedMap(unittest.TestCase):
     @parameterized.expand(
         [
@@ -26,6 +27,7 @@ class TestAccessNestedMap(unittest.TestCase):
     def test_access_nested_map_exception(self, nested_map, path, expected):
         with self.assertRaises(expected):
             access_nested_map(nested_map, path)
+
 
 class TestGetJson(unittest.TestCase):
     # @patch("requests.get")
