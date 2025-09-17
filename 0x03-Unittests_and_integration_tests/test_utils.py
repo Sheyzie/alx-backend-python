@@ -53,7 +53,12 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
-    # @patch("requests.get")
+    """
+    Unit tests for the get_json function in the utils module.
+    These tests verify that the function correctly fetches and returns
+    JSON data from a given URL using the requests library.
+    """
+
     @parameterized.expand(
         [
             ("http://example.com", {"payload": True}),
@@ -61,6 +66,10 @@ class TestGetJson(unittest.TestCase):
         ]
     )
     def test_get_json(self, test_url, test_payload):
+        """
+        Test that get_json returns the expected JSON payload from a given URL.
+        """
+
         with patch("requests.get") as mock_get_data:
             mock_get_data.return_value.json.return_value = test_payload
             result = get_json(test_url)
@@ -69,17 +78,36 @@ class TestGetJson(unittest.TestCase):
 
 
 class TestMemoize(unittest.TestCase):
+    """
+    Unit tests for the memoize decorator in the utils module.
+    These tests verify that the decorated method is only executed once
+    and its result is cached for subsequent accesses.
+    """
 
     def test_memoize(self):
+        """
+        Test that a memoized method is only called once and returns cached value afterwards.
+        """
 
         class TestClass:
+            """
+            A helper class with a method and a memoized property for testing memoization.
+            """
 
             def a_method(self):
+                """
+                A simple method that increments call_count and returns a fixed value.
+                """
+
                 self.call_count += 1
                 return 42
 
             @memoize
             def a_property(self):
+                """
+                A memoized property that returns the result of a_method.
+                """
+
                 return self.a_method()
 
         test_obj = TestClass()
