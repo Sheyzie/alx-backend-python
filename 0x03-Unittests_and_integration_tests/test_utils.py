@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+"""
+This module contains unit tests for utility functions including
+accessing nested maps, fetching JSON data from URLs, and a
+memoization decorator that caches method results.
+
+Each test case uses the unittest framework, and some tests use
+mocking and parameterization to validate expected behavior.
+"""
+
 
 import unittest
 from unittest.mock import patch
