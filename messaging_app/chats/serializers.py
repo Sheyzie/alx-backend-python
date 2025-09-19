@@ -40,13 +40,19 @@ class UserSerializer(serializers.ModelSerializer):
     
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender_id = serializers.StringRelatedField(read_only=True)
+    sender_id = serializers.SerializerMethodField()
     recipient_id = serializers.PrimaryKeyRelatedField(required=True)
 
     class Meta:
         model = Message
         fields = ['message_id', 'sender_id', 'recipient_id', 'message_body', 'sent_at']
         read_only_fields = ['message_id', 'sender_id', 'sent_at']
+
+    def get_sender_id(self, obj):
+        sender_id = self.context.get('sender_id')
+        if not sender_id:
+            raise serializers.ValidationError('No sender ID found')
+        return sender_id
 
     def create(self, validated_data):
         sender_id = self.context.get('sender_id')
