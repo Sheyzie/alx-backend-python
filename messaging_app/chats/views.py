@@ -4,10 +4,14 @@ from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
-from .models import Conversation, Message, CustomUser
+
+from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
 
+
+User = get_user_model()
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()

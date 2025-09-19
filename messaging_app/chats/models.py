@@ -27,8 +27,8 @@ class User(AbstractUser):
 
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    sender_id = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message')
-    recipient_id = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message')
+    sender_id = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_sender')
+    recipient_id = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_reciever')
     message_body = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
 
@@ -38,7 +38,7 @@ class Message(models.Model):
 
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    participants = models.ManyToManyField('user', on_delete=models.CASCADE, related_name='conversation')
+    participants = models.ManyToManyField('user', related_name='conversation')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

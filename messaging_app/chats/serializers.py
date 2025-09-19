@@ -41,7 +41,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     sender_id = serializers.SerializerMethodField()
-    recipient_id = serializers.PrimaryKeyRelatedField(required=True)
+    recipient_id = serializers.PrimaryKeyRelatedField(
+        required=True,
+        queryset=Message.objects.all(),
+    )
 
     class Meta:
         model = Message
