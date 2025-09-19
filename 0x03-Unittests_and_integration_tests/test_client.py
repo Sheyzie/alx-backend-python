@@ -10,8 +10,8 @@ mocking and parameterization to validate expected behavior.
 
 
 import unittest
-from unittest.mock import patch, PropertyMock
-from parameterized import parameterized
+from unittest.mock import patch, PropertyMock, MagicMock
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 from typing import (
     Mapping,
@@ -20,6 +20,7 @@ from typing import (
     Dict,
     Callable,
 )
+import fixtures
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -96,6 +97,42 @@ class TestGithubOrgClient(unittest.TestCase):
         """Test has_license returns correct boolean based on license match"""
         result = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(result, expected)
+
+
+@parameterized_class([
+    {
+        "org_payload": fixtures.TEST_PAYLOAD[0][0],
+        "repos_payload": fixtures.TEST_PAYLOAD[0][1],
+        "expected_repos": fixtures.TEST_PAYLOAD[0][2],
+        "apache2_repos": fixtures.TEST_PAYLOAD[0][3],
+    }
+])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    Integration test for GithubOrgClient.public_repos with patched requests
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up patching for requests.get and assign response based on URL"""
+        cls.get_patcher = patch('requests.get')
+        mock_get = cls.get_patcher.start()
+
+        # Define URL responses mapping
+        def side_effect(url):
+            mock_resp = MagicMock()
+            if url == "https://api.github.com/orgs/google":
+                mock_resp.json.return_value = cls.org_payload
+            elif url == cls.org_payload.get("repos_url"):
+                mock_resp.json.return_value = cls.repos_payload
+            return mock_resp
+
+        mock_get.side_effect = side_effect
+
+    @classmethod
+    def tearDownClass(cls):
+        """Stop patcher after all tests run"""
+        cls.get_patcher.stop()
 
 
 if __name__ == "__main__":
