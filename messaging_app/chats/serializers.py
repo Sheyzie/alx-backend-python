@@ -49,7 +49,7 @@ class MessageSerializer(serializers.ModelSerializer):
         read_only_fields = ['message_id', 'sender_id', 'sent_at']
 
     def get_sender_id(self, obj):
-        sender_id = self.context.get('sender_id')
+        sender_id = self.context.get('request').user.id
         if not sender_id:
             raise serializers.ValidationError('No sender ID found')
         return sender_id
