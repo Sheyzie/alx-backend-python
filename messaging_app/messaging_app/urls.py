@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 
-BASE_API = 'api/v1'
+BASE_API = 'api/auth'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(f'{BASE_API}/', include('chats.urls')),

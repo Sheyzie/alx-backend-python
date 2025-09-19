@@ -17,8 +17,11 @@ class ConversationViewSet(viewsets.ModelViewSet):
     filterset_fields = ['participants']
 
     def get_queryset(self):
-        # Return only conversations the current user is part of
-        return Conversation.objects.filter(participants=self.request.user)
+        conversation_id = self.kwargs.get('conversation_pk')  # note the lookup key
+        return Message.objects.filter(
+            conversation_id=conversation_id,
+            conversation__participants=self.request.user
+        ).order_by('sent_at')
 
     def perform_create(self, serializer):
         # Add current user to participants automatically (if not already added by serializer)
