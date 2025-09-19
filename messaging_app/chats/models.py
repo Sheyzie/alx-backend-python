@@ -44,5 +44,5 @@ class Conversation(models.Model):
     def __str__(self):
         users = self.participants.all()
         if users.count() == 2:
-            return f"Chat: {users[0].username} - {users[1].username}"
+            return f"Chat: {users[0].first_name} - {users[1].first_name}"
         return f"Conversation ({self.conversation_id})" 
