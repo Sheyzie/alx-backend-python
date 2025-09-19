@@ -40,6 +40,9 @@ class UserSerializer(serializers.ModelSerializer):
     
 
 class MessageSerializer(serializers.ModelSerializer):
+    sender_id = serializers.StringRelatedField(read_only=True)
+    recipient_id = serializers.PrimaryKeyRelatedField(required=True)
+
     class Meta:
         model = Message
         fields = ['message_id', 'sender_id', 'recipient_id', 'message_body', 'sent_at']
@@ -65,11 +68,12 @@ class ConversationSerializer(serializers.ModelSerializer):
         write_only=True,
         source='participants'  # points to the `participants` field
     )
+    messages = MessageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Conversation
-        fields = ['conversation_id', 'participants', 'participant_ids', 'created_at']
-        read_only_fields = ['conversation_id', 'participants', 'created_at']
+        fields = ['conversation_id', 'participants', 'participant_ids', 'messages', 'created_at']
+        read_only_fields = ['conversation_id', 'participants', 'messages', 'created_at']
 
     def create(self, validated_data):
         participants = validated_data.pop('participants')
