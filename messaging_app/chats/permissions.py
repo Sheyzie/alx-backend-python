@@ -8,7 +8,8 @@ class IsMessageOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # Only allow access if the user is either the sender or the receiver
-        return obj.sender == request.user or obj.receiver == request.user
+        user = request.user
+        return user.is_authenticated() and (obj.sender == user or obj.receiver == user)
     
 class IsParticipantOfConversation(permissions.BasePermission):
     """
@@ -16,5 +17,8 @@ class IsParticipantOfConversation(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Assuming 'participants' is a ManyToManyField or list of users in the conversation
-        return request.user in obj.participants.all()
+        user = request.user
+
+        if request.method in ['PUT', 'PATCH', 'DELETE']:
+            return user.is_authenticated() and obj.participants.filter(id=user.id).exists()
+        return user.is_authenticated()
