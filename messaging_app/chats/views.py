@@ -10,6 +10,8 @@ from .permissions import IsParticipantOfConversation, IsMessageOwner
 
 from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
+from .pagination import LargeResultsSetPagination, StandardResultsSetPagination
+from .filters import CustomSearchFilter
 
 
 User = get_user_model()
@@ -18,6 +20,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
     permission_classes = [permissions.IsAuthenticated, IsParticipantOfConversation]
+    pagination_class = LargeResultsSetPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['participants']
 
@@ -64,6 +67,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated, IsMessageOwner]
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         return Message.objects.filter(sender=self.request.user)
