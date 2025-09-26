@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
@@ -49,7 +49,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         conversation = self.get_object()
 
         if request.user not in conversation.participants.all():
-            return Response({"detail": "You are not a participant in this conversation."}, status=403)
+            return Response({"detail": "You are not a participant in this conversation."}, status=status.HTTP_403_FORBIDDEN)
 
         data = request.data.copy()
         data['conversation'] = str(conversation.conversation_id)
@@ -74,4 +74,4 @@ class MessageViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
-        return Response(serializer.data, status=201, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
