@@ -10,6 +10,7 @@ ROLE_CHOICES = [
 ]
 
 class User(AbstractUser):
+    username = None # made this none to get pass integrity error
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=50, null=False)
@@ -19,7 +20,8 @@ class User(AbstractUser):
     role = models.CharField(max_length=50, null=False, choices=ROLE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password_hash', 'role']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'password_hash', 'role']
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -27,8 +29,9 @@ class User(AbstractUser):
 
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    sender_id = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_sender')
-    recipient_id = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_reciever')
+    sender = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_sender')
+    recipient = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_reciever')
+    conversation = models.ForeignKey('conversation', on_delete=models.CASCADE, related_name='message')
     message_body = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
 

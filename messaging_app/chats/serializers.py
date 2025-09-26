@@ -12,20 +12,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'role', 'created_at']
-        read_only_fields = ['id', 'role','created_at']
+        fields = ['user_id', 'first_name', 'last_name', 'email', 'phone_number', 'password_hash', 'role', 'created_at']
+        read_only_fields = ['user_id', 'role','created_at']
         
     def create(self, validated_data):
-        password = validated_data.pop('password_hash')
+        password_hash = validated_data.pop('password_hash')
         role = self.context.get('role')
 
         if not role:
             validated_data['role'] = 'guest'
-        if not password:
+        if not password_hash:
             raise ValidationError("Password is required.")
         
         user = User(**validated_data)
-        user.set_password(password)  # hashes the password properly
+        user.set_password(password_hash)  # hashes the password properly
         user.save()
         return user
 
@@ -40,33 +40,27 @@ class UserSerializer(serializers.ModelSerializer):
     
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender_id = serializers.SerializerMethodField()
-    recipient_id = serializers.PrimaryKeyRelatedField(
+    # sender = serializers.SerializerMethodField()
+    recipient = serializers.PrimaryKeyRelatedField(
         required=True,
-        queryset=Message.objects.all(),
+        queryset=User.objects.all()
     )
 
     class Meta:
         model = Message
-        fields = ['message_id', 'sender_id', 'recipient_id', 'message_body', 'sent_at']
-        read_only_fields = ['message_id', 'sender_id', 'sent_at']
+        fields = ['message_id', 'sender', 'recipient', 'conversation', 'message_body', 'sent_at']
+        read_only_fields = ['message_id', 'sender', 'conversation', 'sent_at']
 
-    def get_sender_id(self, obj):
-        sender_id = self.context.get('request').user.id
-        if not sender_id:
-            raise serializers.ValidationError('No sender ID found')
-        return sender_id
+    # def get_message_id(self, obj):
+    #     return obj.sender
 
     def create(self, validated_data):
-        sender_id = self.context.get('sender_id')
-        sender = get_object_or_404(User, id=sender_id)
+        sender = self.context['request'].user
+        conversation = self.context['conversation']
+        validated_data['sender'] = sender
+        validated_data['conversation'] = conversation
+        return super().create(validated_data)
 
-        # remove if exist
-        validated_data.pop('sender_id', None)
-
-        message = Message(sender_id=sender, **validated_data)
-        message.save()
-        return message 
     
 
 class ConversationSerializer(serializers.ModelSerializer):
