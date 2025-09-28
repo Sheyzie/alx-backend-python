@@ -67,3 +67,16 @@ class OffensiveLanguageMiddleware:
             return Response({"error":"rate limit exceeded"}, status=status.HTTP_429_TOO_MANY_REQUESTS)
         q.append(now)
         return self.get_response(request)
+
+
+class RolepermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        user = request.user
+
+        if not user or not hasattr(user, 'role') or user.role not in ['admin', 'moderator']:
+            return Response({'detail': 'Only admin or moderator can access this route'}, status=status.HTTP_403_FORBIDDEN)
+        
+        return self.get_response(request)
