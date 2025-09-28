@@ -4,7 +4,7 @@ import os
 
 
 base_dir = settings.BASE_DIR
-filename = 'request.log'
+filename = 'requests.log'
 
 def log_request(entry):
     with open(os.path.join(base_dir, filename), 'a') as f:
