@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+from rest_framework import status
 from datetime import datetime
 from django.conf import settings
 import os
@@ -21,6 +23,19 @@ class RequestLoggingMiddleware:
         # log into request.log
         log_request(log)
 
+        response = self.get_response(request)
+
+        return response
+    
+
+class RestrictAccessByTimeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        current_time = datetime.now()
+        if not current_time.hour >= 18 and not current_time.hour <= 21:
+            return Response({'detail': 'chat cannot be outside 9PM and 6PM'}, status=status.HTTP_403_FORBIDDEN)
         response = self.get_response(request)
 
         return response
