@@ -26,7 +26,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
-    
+
+
+class UnreadMessagesManager(models.Manager):
+    def get_unread_messages(self, user):
+        return self.filter(receiver=user, read=False).only("id", "sender", "content", "created_at")
 
 class Message(MPTTModel):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -36,7 +40,11 @@ class Message(MPTTModel):
     content = models.TextField()
     parent_message = TreeForeignKey('self', on_delete=models.CASCADE, related_name="replies")
     edited = models.BooleanField(default=False)
+    read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()  # Default manager
+    unread = UnreadMessagesManager()  # Custom manager
 
     def __str__(self):
         return f'From {self.sender}: {self.content}'

@@ -32,8 +32,17 @@ def delete_user(request, pk):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     except User.DoesNotExist:
-        return Response('User does not exist', status=status.HTTP_404_NOT_FOUND)
-    
+        return Response({'detail': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_unread_messages(request):
+    try:
+        messages = Message.unread.get_unread_messages(request.user)
+
+        return Response({'detail': messages}, status=status.HTTP_200_OK)
+    except Message.DoesNotExist:
+        return Response({'detail': 'No unread messages'}, status=status.HTTP_404_NOT_FOUND)    
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
