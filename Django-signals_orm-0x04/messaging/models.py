@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from mptt.models import MPTTModel, TreeForeignKey
 import uuid
 
+from .managers import UnreadMessagesManager
+
 
 ROLE_CHOICES = [
     ('guest', 'Guest'),
@@ -27,10 +29,6 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
-
-class UnreadMessagesManager(models.Manager):
-    def get_unread_messages(self, user):
-        return self.filter(receiver=user, read=False).only("id", "sender", "content", "created_at")
 
 class Message(MPTTModel):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)

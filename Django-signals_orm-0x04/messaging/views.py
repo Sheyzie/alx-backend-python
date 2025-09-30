@@ -38,7 +38,7 @@ def delete_user(request, pk):
 @permission_classes([permissions.IsAuthenticated])
 def get_unread_messages(request):
     try:
-        messages = Message.unread.get_unread_messages(request.user)
+        messages = Message.unread.unread_for_user(request.user).only("message_id", "sender", "content", "timestamp")
 
         return Response({'detail': messages}, status=status.HTTP_200_OK)
     except Message.DoesNotExist:
