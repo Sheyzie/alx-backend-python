@@ -44,7 +44,8 @@ class MessageHistory(models.Model):
     message_history_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     message = models.ForeignKey('message', on_delete=models.CASCADE)
     message_body = models.TextField()
-    created_at = models.DateTimeField(auto_now=True)
+    edited_by = models.ForeignKey('user', on_delete=models.CASCADE)
+    edited_at = models.DateTimeField(auto_now=True)
 
 
 class Conversation(models.Model):

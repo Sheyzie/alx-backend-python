@@ -7,4 +7,4 @@ def create_message_notification(message):
 
 def log_to_message_history(message):
     if message.edited == True:
-        message_history = MessageHistory.objects.create(message=message, message_body=message.message_body)
+        message_history = MessageHistory.objects.create(message=message, message_body=message.message_body, edited_by=message.sender)

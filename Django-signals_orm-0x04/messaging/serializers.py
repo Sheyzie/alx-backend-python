@@ -88,5 +88,5 @@ class ConversationSerializer(serializers.ModelSerializer):
 class MessageHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MessageHistory
-        fields = ['message_history_id', 'message', 'message_body', 'created_at']
-        read_only_fields = ['message_history_id', 'message', 'message_body', 'created_at']
+        fields = ['message_history_id', 'message', 'message_body', 'edited_at', 'edited_by']
+        read_only_fields = ['message_history_id', 'message', 'message_body', 'edited_at', 'edited_by']
