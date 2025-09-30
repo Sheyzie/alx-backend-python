@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions, status, generics
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
@@ -24,10 +24,15 @@ class UserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
 
-class UserDeleteView(generics.DestroyAPIView):
-    queryset = User.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = UserSerializer
+@api_view(['DELETE'])
+@permission_classes([permissions.IsAuthenticated])
+def delete_user(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except User.DoesNotExist:
+        return Response('User does not exist', status=status.HTTP_404_NOT_FOUND)
     
 
 class ConversationViewSet(viewsets.ModelViewSet):
