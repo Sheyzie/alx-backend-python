@@ -218,4 +218,14 @@ SIMPLE_JWT = {
 # ==============
 CORS_ALLOW_ALL_ORIGINS = True  # Development only!
 
+# ===============
+# = Cache Setup =
+# ===============
+CACHES = { 
+    'default': { 
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 
+        'LOCATION': 'unique-snowflake', 
+    } 
+}
+
 

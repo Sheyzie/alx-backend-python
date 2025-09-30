@@ -1,6 +1,8 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
@@ -72,6 +74,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
     #     return Response(MessageSerializer(message).data, status=201)
     
 
+@method_decorator(cache_page(60), name='dispatch')
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
