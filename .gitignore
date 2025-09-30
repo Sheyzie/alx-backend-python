@@ -1,4 +1,5 @@
 .env
 venv
 __pycache__
-note.md
+unit_test_typing_note.md
+signals_orm_query_note.md

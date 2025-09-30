@@ -1,0 +1,383 @@
+{
+	"info": {
+		"_postman_id": "5f3b4755-d179-4618-bce6-bc7edd5bc60f",
+		"name": "Messaging App Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39340330"
+	},
+	"item": [
+		{
+			"name": "Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"Sample\",\n    \"last_name\": \"User1\",\n    \"email\": \"user1@mail.com\",\n    \"password\": \"User1Password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api-auth/users/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api-auth",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JWT login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/token/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create conversation",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Set up the auth request details",
+							"const loginRequest = {",
+							"    url: pm.collectionVariables.get(\"auth_url\") || \"http://127.0.0.1:8000/api/token/\",",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            email: pm.collectionVariables.get(\"user_email\") || \"user1@mail.com\",",
+							"            password: pm.collectionVariables.get(\"user_password\") || \"User1Password\"",
+							"        })",
+							"    }",
+							"};",
+							"",
+							"// Send the auth request",
+							"pm.sendRequest(loginRequest, function (err, res) {",
+							"    if (err) {",
+							"        console.error(\"Login failed:\", err);",
+							"        return;",
+							"    }",
+							"",
+							"    const jsonData = res.json();",
+							"    const token = jsonData.access;",
+							"",
+							"    if (token) {",
+							"        pm.collectionVariables.set(\"jwt_token\", token);",
+							"        console.log(\"Token set successfully.\");",
+							"    } else {",
+							"        console.warn(\"Token not found in response.\");",
+							"    }",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Conversation created\", () => {",
+							"  pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"participant_ids\": [\n        \"0fc42245-d4e2-4048-ad90-f3c2d0a5f232\",\n        \"4d8a53b1-a4f6-4b79-a03c-858ef51fb125\"\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api-auth/conversations/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api-auth",
+						"conversations",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send message",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Set up the auth request details",
+							"const loginRequest = {",
+							"    url: pm.collectionVariables.get(\"auth_url\") || \"http://127.0.0.1:8000/api/token/\",",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            email: pm.collectionVariables.get(\"user_email\") || \"user1@mail.com\",",
+							"            password: pm.collectionVariables.get(\"user_password\") || \"User1Password\"",
+							"        })",
+							"    }",
+							"};",
+							"",
+							"// Send the auth request",
+							"pm.sendRequest(loginRequest, function (err, res) {",
+							"    if (err) {",
+							"        console.error(\"Login failed:\", err);",
+							"        return;",
+							"    }",
+							"",
+							"    const jsonData = res.json();",
+							"    const token = jsonData.access;",
+							"",
+							"    if (token) {",
+							"        pm.collectionVariables.set(\"jwt_token\", token);",
+							"        console.log(\"Token set successfully.\");",
+							"    } else {",
+							"        console.warn(\"Token not found in response.\");",
+							"    }",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message sent\", () => {",
+							"  pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recipient\": \"4d8a53b1-a4f6-4b79-a03c-858ef51fb125\",\n  \"message_body\": \"Hello Again!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api-auth/conversations/f792fc7b-7b60-4387-b5e1-8b2b123f3d32/messages/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api-auth",
+						"conversations",
+						"f792fc7b-7b60-4387-b5e1-8b2b123f3d32",
+						"messages",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get conversations",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Set up the auth request details",
+							"const loginRequest = {",
+							"    url: pm.collectionVariables.get(\"auth_url\") || \"http://127.0.0.1:8000/api/token/\",",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            email: pm.collectionVariables.get(\"user_email\") || \"user1@mail.com\",",
+							"            password: pm.collectionVariables.get(\"user_password\") || \"User1Password\"",
+							"        })",
+							"    }",
+							"};",
+							"",
+							"// Send the auth request",
+							"pm.sendRequest(loginRequest, function (err, res) {",
+							"    if (err) {",
+							"        console.error(\"Login failed:\", err);",
+							"        return;",
+							"    }",
+							"",
+							"    const jsonData = res.json();",
+							"    const token = jsonData.access;",
+							"",
+							"    if (token) {",
+							"        pm.collectionVariables.set(\"jwt_token\", token);",
+							"        console.log(\"Token set successfully.\");",
+							"    } else {",
+							"        console.warn(\"Token not found in response.\");",
+							"    }",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetch successful\", () => {",
+							"  pm.response.to.have.status(200);",
+							"  let data = pm.response.json();",
+							"  pm.expect(data.results.length).to.be.above(0);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api-auth/conversations/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api-auth",
+						"conversations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unauthorised",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt_token",
+			"value": ""
+		}
+	]
+}
