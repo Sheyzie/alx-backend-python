@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from mptt.models import MPTTModel, TreeForeignKey
 import uuid
 
 
@@ -27,12 +28,13 @@ class User(AbstractUser):
         return f'{self.first_name} {self.last_name}'
     
 
-class Message(models.Model):
+class Message(MPTTModel):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     sender = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_sender')
     receiver = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_reciever')
     conversation = models.ForeignKey('conversation', on_delete=models.CASCADE, related_name='message')
     content = models.TextField()
+    parent_message = TreeForeignKey('self', on_delete=models.CASCADE, related_name="replies")
     edited = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
