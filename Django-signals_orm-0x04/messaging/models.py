@@ -30,14 +30,14 @@ class User(AbstractUser):
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     sender = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_sender')
-    recipient = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_reciever')
+    receiver = models.ForeignKey('user', on_delete=models.CASCADE, related_name='message_reciever')
     conversation = models.ForeignKey('conversation', on_delete=models.CASCADE, related_name='message')
-    message_body = models.TextField()
+    content = models.TextField()
     edited = models.BooleanField(default=False)
-    sent_at = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'From {self.sender}: {self.message_body}'
+        return f'From {self.sender}: {self.content}'
 
 
 class MessageHistory(models.Model):
@@ -57,3 +57,10 @@ class Conversation(models.Model):
         if users.count() == 2:
             return f"Chat: {users[0].first_name} - {users[1].first_name}"
         return f"Conversation ({self.conversation_id})" 
+
+
+class Notification(models.Model):
+    notification_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    receiver = models.ForeignKey('user', on_delete=models.CASCADE)
+    message = models.ForeignKey('message', on_delete=models.CASCADE)
+    is_read = models.BooleanField(default=False)

@@ -41,15 +41,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     # sender = serializers.SerializerMethodField()
-    recipient = serializers.PrimaryKeyRelatedField(
+    receiver = serializers.PrimaryKeyRelatedField(
         required=True,
         queryset=User.objects.all()
     )
 
     class Meta:
         model = Message
-        fields = ['message_id', 'sender', 'recipient', 'conversation', 'message_body', 'sent_at']
-        read_only_fields = ['message_id', 'sender', 'conversation', 'sent_at']
+        fields = ['message_id', 'sender', 'receiver', 'conversation', 'content', 'timestamp']
+        read_only_fields = ['message_id', 'sender', 'conversation', 'timestamp']
 
     # def get_message_id(self, obj):
     #     return obj.sender
