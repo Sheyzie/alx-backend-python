@@ -90,7 +90,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        return Message.objects.select_related("sender").prefetch_related("replies").filter(sender=self.request.user)
+        return Message.objects.select_related("receiver").prefetch_related("replies").filter(sender=self.request.user)
 
     def create(self, request, *args, **kwargs):
         conversation_id = self.kwargs.get('conversation_pk')
