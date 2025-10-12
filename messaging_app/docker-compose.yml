@@ -21,6 +21,7 @@ services:
       - db
     env_file:
       - .env
+    command: python manage.py runserver 0.0.0.0:8000
     # to restart on failure
     restart: on-failure
 
