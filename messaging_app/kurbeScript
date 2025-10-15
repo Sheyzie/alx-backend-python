@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if minikube start --driver=docker; then
+    # status=$(minikube status)
+    status=$(kubectl cluster-info)
+
+    # isConfigured=$(echo "$status" | grep kubeconfig)
+
+    echo "$status"
+
+    kubectl get pod
+
+    minikube stop
+fi
+
