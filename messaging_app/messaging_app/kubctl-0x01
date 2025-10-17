@@ -1,0 +1,10 @@
+#!/bin/bash
+
+kubectl scale --replicas=3 -f deployment.yaml
+
+# kubectl get pods
+kubectl get pod
+
+wrk -t4 -c100 -d30s http://192.168.49.2:30234
+
+kubectl top nodes
