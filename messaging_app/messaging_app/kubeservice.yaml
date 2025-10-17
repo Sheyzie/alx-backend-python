@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: messaging_app-service # the name of this service
+spec: # specification for the service
+  selector: # allow connection to container through label
+    app: messaging_app # the deployment name to connect to
+    version: green
+  ports:
+    protocol: TCP
+    port: 80 # the port of this service
+    targetPort: 8080 # the container port

@@ -13,6 +13,7 @@ spec: # specification for the deployment
     metadata:
       labels:
         app: messaging_app
+        version: green
     spec: # specification for the pods
       containers:
       - image: messaging_app:1.0.0 # This image is only available on my local machine

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+kubectl apply -f blue_deployment.yaml
+
+kubectl apply -f green_deployment.yaml
+
+kubectl logs -l app=messaging_app
