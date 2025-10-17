@@ -16,7 +16,7 @@ spec: # specification for the deployment
         version: blue
     spec: # specification for the pods
       containers:
-      - image: messaging_app:1.0.0 # This image is only available on my local machine
+      - image: messaging_app:2.0 # This image is only available on my local machine
         imagePullPolicy: Always
         name: messaging_app # container name
         ports:

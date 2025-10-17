@@ -1,0 +1,11 @@
+#!/bin/bash
+
+kubectl apply -f blue_deployment.yaml
+
+kubectl rollout status deployment messaging_app-deployment
+
+# this url is mapped to the IP address created by my external service
+curl -s http://messaging-app.com/admin
+
+# kubectl get pods
+kubectl get pod
