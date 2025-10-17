@@ -1,6 +1,6 @@
 #!/bin/bash
 
-kubectl scale --replicas=3 -f deployment.yaml
+kubectl scale deployment messaging_app-deployment --replicas=3
 
 # kubectl get pods
 kubectl get pod
