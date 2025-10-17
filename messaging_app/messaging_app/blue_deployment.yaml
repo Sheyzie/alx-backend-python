@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: messaging_app
+  name: messaging_app-deployment
+spec: # specification for the deployment
+  replicas: 2
+  selector:
+    matchLabels:
+      app: messaging_app
+  template:
+    metadata:
+      labels:
+        app: messaging_app
+        version: blue
+    spec: # specification for the pods
+      containers:
+      - image: messaging_app:2.0 # This image is only available on my local machine
+        imagePullPolicy: Always
+        name: messaging_app # container name
+        ports:
+        - containerPort: 8000
+        # the env below is require secret and configMap which are not implemented yet
+        env:
+        - name: DB_NAME
+          valueFrom: 
+            secretKeyRef:
+              name: messaging_app-secret
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom: 
+            secretKeyRef:
+              name: messaging_app-secret
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: messaging_app-secret
+              key: DB_PASSWORD
+        - name: DB_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: messaging_app-config
+              key: DB_HOST
+        - name: DB_PORT
+          value: "3306"
+        
