@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Ingress
+metadata:
+  name: messaging_app-ingress
+  namespace: kubernetes-dashboard
+spec:
+  rule:
+  - host: messaging-app.com # this host name resolve local and mapped to an ip in my /etc/hosts
+  http:
+    paths: # this is the url path (everything after the domain name)
+    - path: /api
+      backend: # this is where the incoming request will be redirected to (usually an internal service)
+      serviceName: kubernetes-dashboard # the internal service name to connect to
+      servicePort: 80
+    - path: /admin
+      backend: # this is where the incoming request will be redirected to (usually an internal service)
+      serviceName: kubernetes-dashboard # the internal service name to connect to
+      servicePort: 80

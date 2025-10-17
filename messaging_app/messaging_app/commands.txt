@@ -1,0 +1,6 @@
+# create an ingress external service from ingress.yaml
+kubectl apply -f ingress.yaml
+
+# starts the K8s Nginx implementation of ingress controller
+minikube addons enable ingress
+
