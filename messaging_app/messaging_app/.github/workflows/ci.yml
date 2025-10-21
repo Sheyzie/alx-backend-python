@@ -1,4 +1,4 @@
-name: Python CI
+name: Django CI
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.8, 3.10, 3.11]
+        python-version: [3.10, 3.11]
 
     steps:
     - name: Checkout code
@@ -27,8 +27,27 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest
+        pip install pytest pytest-django pytest-cov flake8
 
-    - name: Run tests
+    - name: Run flake8 linting
       run: |
-        pytest
+        echo "Running flake8 linting..."
+        flake8 .
+      continue-on-error: false  # Fail the build if linting fails
+
+    - name: Run tests with coverage
+      run: |
+        echo "Running tests with coverage..."
+        pytest --cov=. --cov-report=xml --cov-report=html
+
+    - name: Upload coverage report (HTML)
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-coverage-report
+        path: htmlcov  # Folder created by `--cov-report=html`
+
+    - name: Upload coverage report (XML)
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage.xml
+        path: coverage.xml
