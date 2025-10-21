@@ -25,7 +25,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing depencies...'
-                sh 'pip3 install -r alx-backend-python/requirements.txt'
+                sh 'pip3 install -r messaging_app/requirements.txt'
             }
         }
 
