@@ -1,0 +1,9 @@
+name: messaging_app
+version: 1.0.0
+description: A simple messaging app built with Django
+maintainer: myrealemail@mail.com
+dependencies:
+  - python >=3.10
+  - django >=4.0
+  - redis
+  - gunicorn
