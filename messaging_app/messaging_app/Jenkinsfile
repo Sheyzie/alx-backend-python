@@ -33,7 +33,7 @@ pipeline {
             steps {
                 echo 'Building the application...'
                 // Example build command
-                sh './build.sh'
+                sh 'docker build -t messaging_app:1.0'
             }
         }
 
