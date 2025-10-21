@@ -7,6 +7,14 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'my-credentials-id',
+                    url: 'git@github.com:Sheyzie/alx-backend-python.git'
+            }
+        }
+
         stage('Get Source Code') {
             steps {
                 echo 'Getting source code from github...'
@@ -17,7 +25,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing depencies...'
-                sh 'pip install -r alx-backend-python/requirements.txt'
+                sh 'pip3 install -r alx-backend-python/requirements.txt'
             }
         }
 
